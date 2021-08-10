@@ -1179,6 +1179,7 @@ static void *worker_thread_main(void *arg)
         if (r == -1)
         {
             syslog(LOG_ERR, "[THR %d] error during getsockname: %m", thread_num);
+            close(socket_descriptor);
             continue;
         }
         
@@ -1186,6 +1187,7 @@ static void *worker_thread_main(void *arg)
         if (r == -1)
         {
             syslog(LOG_ERR, "[THR %d] error during getpeername: %m", thread_num);
+            close(socket_descriptor);
             continue;
         }
         int peer_port = ntohs(addr.sin6_port);
@@ -1194,6 +1196,7 @@ static void *worker_thread_main(void *arg)
         if (inet_ntop(AF_INET6, &addr.sin6_addr, buf, sizeof(buf)) == NULL)
         {
             syslog(LOG_ERR, "[THR %d] error during inet_ntop: %m", thread_num);
+            close(socket_descriptor);
             continue;
         }
         
